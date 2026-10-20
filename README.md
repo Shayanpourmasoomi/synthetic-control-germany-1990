@@ -1,68 +1,44 @@
-# Synthetic Control Method (SCM) — Germany Reunification (1990) | Python
+# German Reunification: A Synthetic Control Analysis
 
-This repository contains a Python implementation of the **Synthetic Control Method (SCM)** to evaluate the economic impact of the **1990 German reunification**.  
-The analysis follows the structure of an applied metrics problem set and reproduces standard SCM outputs, including **donor weights, covariate balance, gap plots, and placebo tests**.
+A from-scratch Python implementation of the **synthetic control method** (Abadie, Diamond and Hainmueller, 2015) applied to the 1990 reunification of Germany. West Germany is the treated unit; a weighted combination of 16 OECD countries forms its counterfactual over 1960–2003.
 
-> Assignment context: *Problem Set 07 — Synthetic Control Method (SCM), Spring 2025*.
+## Implementation
 
----
+- **Donor weights** estimated by constrained optimisation (`scipy.optimize`): non-negative weights summing to one, chosen to minimise pre-1990 RMSPE on the outcome and on predictors (inflation, trade openness, education, industry share)
+- **Missing data** handled with K-nearest-neighbour imputation
+- **Outputs**: donor weights, covariate balance, actual vs synthetic path, pointwise and cumulative gaps
 
-## Project Overview
+## Inference and robustness
 
-We use a panel dataset for **West Germany** (treated unit) and **16 OECD countries** (donor pool) over **1960–2003** to construct a synthetic counterfactual of West Germany’s GDP (or GDP-like outcome variable), treating **1990** as the intervention year.
+| Check | Purpose |
+|---|---|
+| In-time placebo (fake treatment in 1982) | Tests whether the method finds a "gap" where none should exist |
+| In-space placebos (each donor treated in 1990) | Builds the reference distribution of effects |
+| Post/pre-RMSPE ratio | Ranks the treated unit against the placebo distribution |
 
-The code implements:
-- Missing-data handling using **KNN imputation**
-- Weight estimation via constrained optimization (weights sum to 1 and are non-negative)
-- Visualization of:
-  - Actual vs. synthetic outcome
-  - Pointwise gap (treated − synthetic)
-  - Cumulative gap
-- Robustness checks:
-  - **In-time placebo** (false intervention year = 1982)
-  - **In-space placebo** (each donor unit treated as if it were treated in 1990)
-  - **Post/Pre RMSPE ratio** and an empirical placebo-based p-value
+West Germany's post/pre-RMSPE ratio is **30.4**, meaning the post-reunification gap is about thirty times larger than the pre-treatment fit error.
 
----
+## Repository structure
 
-## Data
+```
+analysis.md   # full analysis: code, weights, gap tables and placebo results
+```
 
-Expected input file:
+## Reproducing
 
-- `synthetic_control_germany_robust.csv`
-
-Required columns:
-- `entity_id` (country name / unit id)
-- `year_recorded` (year)
-- `indicator_score` (outcome, e.g., GDP or GDP proxy)
-- Covariates used in matching:
-  - `metric_inflation`
-  - `trade`
-  - `metric_education`
-  - `metric_industry_share`
-
----
-
-## Method (High-level)
-
-Let:
-- Treated unit: **West Germany**
-- Treatment year: **1990**
-- Donor pool: all other countries in the dataset
-
-We estimate donor weights **w** by minimizing pre-treatment RMSPE between the treated outcome and a weighted average of donor outcomes, subject to:
-- \( \sum_j w_j = 1 \)
-- \( w_j \ge 0 \)
-
-Missing values are imputed using `KNNImputer(n_neighbors=5)`.
-
----
-
-## Installation
-
-### 1) Create and activate an environment (recommended)
+The analysis expects a country-year panel `synthetic_control_germany_robust.csv` with columns `entity_id`, `year_recorded`, `indicator_score` (outcome) and the four predictors. It follows the structure of the Abadie et al. (2015) reunification dataset.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate   # macOS/Linux
-# .venv\Scripts\activate    # Windows
+pip install pandas numpy scipy scikit-learn matplotlib
+```
+
+## Reference
+
+Abadie, A., Diamond, A., and Hainmueller, J. (2015). Comparative Politics and the Synthetic Control Method. *American Journal of Political Science*, 59(2), 495–510.
+
+## Context
+
+Developed during the MSc in Economics at Sharif University of Technology (Applied Econometrics, Spring 2025).
+
+---
+**Shayan Pourmasoomi** · MSc Economics, Sharif University of Technology · [LinkedIn](https://www.linkedin.com/in/shayan-pourmasoomi-8b6206389)

@@ -1,7 +1,6 @@
 # Q_2.1
 
 
-
 ```python
 import pandas as pd
 import numpy as np
@@ -34,8 +33,6 @@ donor_pool = [entity for entity in df[id_column].unique() if entity != treated_u
 print("\nDonor pool:", donor_pool)
 
 pre_treatment = df[df['year_recorded'] < 1990]
-
-
 
 
 treated_data = pre_treatment[pre_treatment[id_column] == treated_unit]
@@ -174,8 +171,6 @@ print(result_df.head())
 **bold text**
 
 
-
-
 ```python
 plt.figure(figsize=(10, 6))
 plt.plot(result_df['year_recorded'], result_df['actual_gdp'], label='Actual GDP (West Germany)', color='blue')
@@ -222,19 +217,14 @@ print(post_treatment[['year_recorded', 'cumulative_gap']].tail())
 
 
     
-![png](output_4_0.png)
     
 
 
-
     
-![png](output_4_1.png)
     
 
 
-
     
-![png](output_4_2.png)
     
 
 
@@ -257,7 +247,6 @@ print(post_treatment[['year_recorded', 'cumulative_gap']].tail())
 
 
 # Part d
-
 
 
 ```python
@@ -316,7 +305,6 @@ plt.show()
 
 
     
-![png](output_6_0.png)
     
 
 
@@ -398,7 +386,6 @@ print(f"RMSPE West germany: {rmspe_wg:.2f}")
 
 
     
-![png](output_8_0.png)
     
 
 
@@ -484,7 +471,6 @@ print(f"Post/Pre RMSPE Ratio for West Germany: {wg_ratio:.2f}")
 
 
     
-![png](output_10_0.png)
     
 
 
