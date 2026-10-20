@@ -24,6 +24,8 @@ West Germany's post/pre-RMSPE ratio is **30.4**, meaning the post-reunification 
 analysis.md   # full analysis: code, weights, gap tables and placebo results
 ```
 
+Figures and tables are generated when the code is run; the figure files themselves are not stored in the repository.
+
 ## Reproducing
 
 The analysis expects a country-year panel `synthetic_control_germany_robust.csv` with columns `entity_id`, `year_recorded`, `indicator_score` (outcome) and the four predictors. It follows the structure of the Abadie et al. (2015) reunification dataset.
